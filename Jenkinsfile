@@ -1,22 +1,18 @@
 pipeline {
     agent any
-
+    environment {
+        // On dit à Jenkins d'envoyer ses ordres à l'adresse de ton Windows
+        DOCKER_HOST = 'tcp://host.docker.internal:2375'
+    }
     stages {
-        stage('Nettoyage') {
+        stage('Nettoyage et Build') {
             steps {
-                // Supprime les anciennes images pour gagner de la place
-                sh 'docker image prune -f'
-            }
-        }
-        stage('Construction Image') {
-            steps {
-                // Utilise le point (.) pour dire que le Dockerfile est ici
-                sh 'docker build -t mon-app-web:latest .'
-            }
-        }
-        stage('Déploiement Test') {
-            steps {
-                echo "L'image mon-app-web a été créée avec succès sur votre Docker Windows !"
+                script {
+                    // On utilise le plugin Docker pour piloter Docker Desktop
+                    docker.withServer('tcp://host.docker.internal:2375') {
+                        docker.build("mon-app-web:latest", ".")
+                    }
+                }
             }
         }
     }
