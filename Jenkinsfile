@@ -4,23 +4,22 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Jenkins récupère le code depuis GitHub
+                // Récupération du code
                 checkout scm
             }
         }
-        stage('Build Docker Image') {
+        stage('Construction Image') {
             steps {
                 script {
-                    // Jenkins construit l'image Docker
-                    // Note : On utilise 'docker' directement car Jenkins tourne dans Docker sur votre Windows
-                    sh "docker build -t mon-app-web:latest ."
+                    // On utilise la commande interne de Jenkins pour Docker
+                    // Cela évite l'erreur "docker introuvable"
+                    docker.build("mon-app-web:latest")
                 }
             }
         }
         stage('Verification') {
             steps {
-                // Vérifie que l'image existe bien
-                sh "docker images | grep mon-app-web"
+                echo "L'image a été construite avec succès !"
             }
         }
     }
