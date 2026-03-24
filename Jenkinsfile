@@ -1,25 +1,28 @@
 pipeline {
     agent any
+    
+    tools {
+        // Cela dit à Jenkins d'installer et d'utiliser Docker
+        dockerTool 'ma-config-docker' 
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                // Récupération du code
                 checkout scm
             }
         }
         stage('Construction Image') {
             steps {
                 script {
-                    // On utilise la commande interne de Jenkins pour Docker
-                    // Cela évite l'erreur "docker introuvable"
+                    // On utilise la syntaxe du plugin qui est plus fiable
                     docker.build("mon-app-web:latest")
                 }
             }
         }
         stage('Verification') {
             steps {
-                echo "L'image a été construite avec succès !"
+                echo "Succès ! L'image est prête."
             }
         }
     }
