@@ -2,21 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('Extraction') {
+        stage('Nettoyage') {
             steps {
-                // Récupère le code depuis GitHub
-                checkout scm
+                // Supprime les anciennes images pour gagner de la place
+                sh 'docker image prune -f'
             }
         }
-        stage('Construction sur l’Hôte') {
+        stage('Construction Image') {
             steps {
-                // On utilise 'bat' pour envoyer la commande à Windows directement
-                bat 'docker build -t mon-app-web:latest .'
+                // Utilise le point (.) pour dire que le Dockerfile est ici
+                sh 'docker build -t mon-app-web:latest .'
             }
         }
-        stage('Verification') {
+        stage('Déploiement Test') {
             steps {
-                echo "L'image est maintenant visible dans Docker Desktop !"
+                echo "L'image mon-app-web a été créée avec succès sur votre Docker Windows !"
             }
         }
     }
