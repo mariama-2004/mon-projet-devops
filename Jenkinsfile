@@ -1,21 +1,11 @@
 pipeline {
     agent any
-    
-    tools {
-        // On utilise le nouveau nom défini dans Tools
-        dockerTool 'docker-client' 
-    }
-    
     stages {
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // On récupère le chemin de l'outil avec le nouveau nom
-                    def dockerBin = tool name: 'docker-client', type: 'docker'
-                    
-                    withEnv(["PATH+DOCKER=${dockerBin}/bin"]) {
-                        docker.build("mon-app-web:latest", ".")
-                    }
+                    // On lance la commande de build directement dans le terminal du conteneur
+                    sh "docker build -t mon-app-web:latest ."
                 }
             }
         }
