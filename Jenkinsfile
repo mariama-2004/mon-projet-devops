@@ -2,15 +2,20 @@ pipeline {
     agent any
     
     tools {
-        // Cela dit à Jenkins d'ajouter l'outil "docker" au PATH
-        dockerTool 'docker' 
+        dockerTool 'docker'
     }
     
     stages {
         stage('Build') {
             steps {
                 script {
-                    docker.build("mon-app-web:latest", ".")
+                    // On récupère le chemin de l'outil installé par Jenkins
+                    def dockerBin = tool name: 'docker', type: 'docker'
+                    
+                    // On exécute le build en utilisant ce chemin précis
+                    withEnv(["PATH+DOCKER=${dockerBin}/bin"]) {
+                        docker.build("mon-app-web:latest", ".")
+                    }
                 }
             }
         }
