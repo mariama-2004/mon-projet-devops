@@ -2,17 +2,17 @@ pipeline {
     agent any
     
     tools {
-        dockerTool 'docker'
+        // On utilise le nouveau nom défini dans Tools
+        dockerTool 'docker-client' 
     }
     
     stages {
         stage('Build') {
             steps {
                 script {
-                    // On récupère le chemin de l'outil installé par Jenkins
-                    def dockerBin = tool name: 'docker', type: 'docker'
+                    // On récupère le chemin de l'outil avec le nouveau nom
+                    def dockerBin = tool name: 'docker-client', type: 'docker'
                     
-                    // On exécute le build en utilisant ce chemin précis
                     withEnv(["PATH+DOCKER=${dockerBin}/bin"]) {
                         docker.build("mon-app-web:latest", ".")
                     }
