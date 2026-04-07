@@ -1,13 +1,17 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:latest'
+            // On partage le socket pour que ce client parle à votre Docker Windows
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Cette syntaxe utilise le plugin Docker Pipeline
-                    // Elle est plus stable que la commande "sh" brute
-                    docker.build("mon-app-web:latest", ".")
+                    sh "docker build -t mon-app-web:latest ."
                 }
             }
         }
