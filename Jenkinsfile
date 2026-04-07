@@ -1,15 +1,12 @@
 pipeline {
     agent any
     
-    tools {
-        // "docker" doit correspondre exactement au "Name" que vous avez mis dans Jenkins Tools
-        docker 'docker' 
-    }
-
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // On utilise directement la commande shell
+                    // Jenkins utilisera le moteur Docker de votre Windows
                     sh "docker build -t mon-app-web:latest ."
                 }
             }
