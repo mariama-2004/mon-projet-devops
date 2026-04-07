@@ -5,9 +5,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // On utilise directement la commande shell
-                    // Jenkins utilisera le moteur Docker de votre Windows
-                    sh "docker build -t mon-app-web:latest ."
+                    // Cette syntaxe utilise le plugin Docker Pipeline
+                    // Elle est plus stable que la commande "sh" brute
+                    docker.build("mon-app-web:latest", ".")
                 }
             }
         }
